@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">{{ title }}</h1>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if payments %}
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <!-- Removed table-sm class to allow for more natural padding (UX Improvement) -->
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <!-- Added horizontal padding (px-3) for spacing -->
+                            <th class="px-3">Payment ID</th>
+                            <th class="px-3">Rental ID</th>
+                            <th>Customer Paid</th>
+                            <th>Car Rented</th>
+                            <th>Amount</th>
+                            <th class="px-3">Payment Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payments %}
+                        <tr>
+                            <!-- Added horizontal padding (px-3) for spacing -->
+                            <td class="px-3">{{ payment.payment_id }}</td>
+                            <td class="px-3">{{ payment.rental_id }}</td>
+                            <!-- Displaying Customer Name clearly -->
+                            <td>{{ payment.first_name }} {{ payment.last_name }}</td>
+                            <!-- Displaying Car Details clearly with line break -->
+                            <td>
+                                <strong>{{ payment.brand }} {{ payment.model }}</strong><br>
+                                <small class="text-muted">{{ payment.reg_number }}</small>
+                            </td>
+                            <!-- Removed | format filter to prevent internal error -->
+                            <td><span class="badge bg-success fw-bold">${{ payment.amount }}</span></td>
+                            
+                            <!-- Removed | strftime filter to prevent internal error -->
+                            <td class="px-3">{{ payment.payment_date }}</td>
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <div class="alert alert-info">No payments have been processed yet.</div>
+    {% endif %}
+</div>
+{% endblock %}

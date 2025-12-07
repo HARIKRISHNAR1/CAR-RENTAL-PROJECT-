@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <!-- Card 1: Rentals -->
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transform hover:scale-[1.01] transition duration-300">
+        <div class="flex items-center justify-between">
+            <h3 class="text-xl font-semibold text-gray-700">Active Rentals</h3>
+            <i data-lucide="clipboard-list" class="h-8 w-8 text-blue-500"></i>
+        </div>
+        <p class="mt-4 text-4xl font-bold text-gray-900">N/A</p>
+        <p class="text-sm text-gray-500">Need to implement count query.</p>
+        <a href="{{ url_for('rental_list') }}" class="mt-4 inline-block text-blue-500 hover:text-blue-700 font-medium">View Rentals &rarr;</a>
+    </div>
+
+    <!-- Card 2: Available Cars -->
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transform hover:scale-[1.01] transition duration-300">
+        <div class="flex items-center justify-between">
+            <h3 class="text-xl font-semibold text-gray-700">Available Cars</h3>
+            <i data-lucide="key" class="h-8 w-8 text-green-500"></i>
+        </div>
+        <p class="mt-4 text-4xl font-bold text-gray-900">N/A</p>
+        <p class="text-sm text-gray-500">Need to implement count query.</p>
+        <a href="{{ url_for('car_list') }}" class="mt-4 inline-block text-blue-500 hover:text-blue-700 font-medium">View Inventory &rarr;</a>
+    </div>
+
+    <!-- Card 3: Total Customers -->
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transform hover:scale-[1.01] transition duration-300">
+        <div class="flex items-center justify-between">
+            <h3 class="text-xl font-semibold text-gray-700">Total Customers</h3>
+            <i data-lucide="users" class="h-8 w-8 text-yellow-500"></i>
+        </div>
+        <p class="mt-4 text-4xl font-bold text-gray-900">N/A</p>
+        <p class="text-sm text-gray-500">Need to implement count query.</p>
+        <a href="{{ url_for('customer_list') }}" class="mt-4 inline-block text-blue-500 hover:text-blue-700 font-medium">View Customers &rarr;</a>
+    </div>
+    
+    <!-- Card 4: Total Payments -->
+    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transform hover:scale-[1.01] transition duration-300">
+        <div class="flex items-center justify-between">
+            <h3 class="text-xl font-semibold text-gray-700">Total Payments (YTD)</h3>
+            <i data-lucide="credit-card" class="h-8 w-8 text-red-500"></i>
+        </div>
+        <p class="mt-4 text-4xl font-bold text-gray-900">$N/A</p>
+        <p class="text-sm text-gray-500">Need to implement sum query.</p>
+        <a href="{{ url_for('payment_list') }}" class="mt-4 inline-block text-blue-500 hover:text-blue-700 font-medium">View Payments &rarr;</a>
+    </div>
+</div>
+
+<div class="mt-12 p-6 bg-white rounded-xl shadow-lg border border-gray-200">
+    <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b pb-2">Quick Actions</h2>
+    <div class="flex flex-wrap gap-4">
+        <!-- Main Action: Start New Rental -->
+        <a href="{{ url_for('add_rental') }}" class="flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition shadow-lg transform hover:scale-105">
+            <i data-lucide="plus" class="h-5 w-5 mr-2"></i> Start New Rental
+        </a>
+        <!-- Secondary Action: Add Car -->
+        <a href="{{ url_for('add_car') }}" class="flex items-center px-6 py-3 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition shadow-lg">
+            <i data-lucide="car" class="h-5 w-5 mr-2"></i> Add New Car
+        </a>
+        <!-- Secondary Action: Add Customer -->
+        <a href="{{ url_for('add_customer') }}" class="flex items-center px-6 py-3 bg-gray-600 text-white font-medium rounded-lg hover:bg-gray-700 transition shadow-lg">
+            <i data-lucide="user-plus" class="h-5 w-5 mr-2"></i> Add New Customer
+        </a>
+    </div>
+</div>
+
+{% endblock %}

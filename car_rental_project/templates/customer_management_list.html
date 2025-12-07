@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto p-4 md:p-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Customer Management</h1>
+        <a href="{{ url_for('add_customer') }}" class="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 transition duration-150">
+            + Add New Customer
+        </a>
+    </div>
+
+    <div class="bg-white shadow-xl rounded-xl overflow-hidden">
+        {% if customers %}
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for customer in customers %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ customer.id }}</td>
+                    <!-- FIX: Accessing by named key (first_name, last_name) -->
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ customer.first_name }} {{ customer.last_name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ customer.email }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ customer.phone }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                        <a href="{{ url_for('edit_customer', customer_id=customer.id) }}" class="text-indigo-600 hover:text-indigo-900 transition duration-150">Edit</a>
+                        
+                        <!-- Delete Form -->
+                        <form method="POST" action="{{ url_for('delete_customer', customer_id=customer.id) }}" class="inline">
+                            <button type="submit" 
+                                    class="text-red-600 hover:text-red-900 transition duration-150"
+                                    onclick="return confirm('Are you sure you want to delete this customer? This action cannot be undone and will delete associated rentals/payments.')"
+                                    >
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="p-6 text-gray-500">No customers found. Click "Add New Customer" to get started.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

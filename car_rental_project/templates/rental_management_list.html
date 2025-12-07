@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">{{ title }}</h1>
+        <a href="{{ url_for('add_rental') }}" class="btn btn-primary btn-lg shadow-sm">
+            <i class="fas fa-plus me-2"></i> Start New Rental
+        </a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if rentals %}
+    <div class="card shadow">
+        <div class="card-header bg-white">
+            <h5 class="mb-0 text-muted">All Rental Agreements</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <!-- Removed 'table-sm' to increase vertical padding and improved spacing -->
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th> 
+                            <th>Car Rented</th>
+                            <th>Rent Date</th>
+                            <th>Expected Return</th>
+                            <th>Actual Return</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rental in rentals %}
+                        <tr class="{% if not rental.actual_return_date %}table-warning{% endif %}">
+                            <td class="fw-bold">{{ rental.rental_id }}</td>
+                            <td>{{ rental.first_name }} {{ rental.last_name }}</td>
+                            <td>
+                                <strong>{{ rental.brand }} {{ rental.model }}</strong><br>
+                                <small class="text-muted">{{ rental.reg_number }}</small>
+                            </td>
+                            
+                            <!-- Added px-3 (horizontal padding) for better separation of dates -->
+                            <td class="px-3">{{ rental.rent_date | strftime('%Y-%m-%d') }}</td>
+                            
+                            <!-- Added px-3 (horizontal padding) for better separation of dates -->
+                            <td class="px-3">
+                                {{ rental.expected_return_date | strftime('%Y-%m-%d') }}
+                            </td>
+                            <td>
+                                {% if rental.actual_return_date %}
+                                    <span class="text-success">{{ rental.actual_return_date | strftime('%Y-%m-%d') }}</span>
+                                {% else %}
+                                    <span class="text-danger">Pending</span>
+                                {% endif %}
+                            </td>
+                            
+                            <td>
+                                {% if rental.actual_return_date %}
+                                    <span class="badge bg-success py-2 px-3">Returned</span>
+                                {% else %}
+                                    <!-- Simplified badge logic to just show Active -->
+                                    <span class="badge bg-warning text-dark py-2 px-3">
+                                        Active
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if not rental.actual_return_date %}
+                                <form method="POST" action="{{ url_for('return_rental', rental_id=rental.rental_id) }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-success shadow-sm">
+                                        <i class="fas fa-check-circle me-1"></i> Process Return
+                                    </button>
+                                </form>
+                                {% else %}
+                                    <span class="text-muted"><i class="fas fa-history"></i> Completed</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <div class="alert alert-info border-0 shadow-sm text-center py-4">
+            <h4 class="alert-heading">No Rental Agreements Found</h4>
+            <p>Start a new rental to see data here and manage your car inventory flow.</p>
+            <hr>
+            <a href="{{ url_for('add_rental') }}" class="btn btn-primary btn-lg">Start First Rental</a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
