@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow-2xl">
+    <h2 class="text-2xl font-bold text-indigo-700 mb-6 border-b pb-2">{{ title }}</h2>
+    
+    <!-- This form posts data to the add_rental route in app.py -->
+    <form method="POST" action="{{ url_for('add_rental') }}">
+        
+        <div class="space-y-6">
+            
+            <!-- Customer Select -->
+            <div>
+                <label for="customer_id" class="block text-sm font-medium text-gray-700 mb-1">Select Customer</label>
+                <select id="customer_id" name="customer_id" required 
+                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm">
+                    {% if not customers %}
+                        <option value="" disabled selected>No Customers Available (Add one first)</option>
+                    {% else %}
+                        <option value="" disabled selected>-- Choose a Customer --</option>
+                        {% for customer in customers %}
+                            <option value="{{ customer.id }}">{{ customer.first_name }} {{ customer.last_name }} ({{ customer.phone or customer.email }})</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                {% if not customers %}<p class="mt-1 text-xs text-red-500">You must add a customer before starting a rental.</p>{% endif %}
+            </div>
+
+            <!-- Car Select -->
+            <div>
+                <label for="car_id" class="block text-sm font-medium text-gray-700 mb-1">Select Available Car</label>
+                <select id="car_id" name="car_id" required 
+                        class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md shadow-sm">
+                    {% if not available_cars %}
+                        <option value="" disabled selected>No Cars Available (Ensure status is 'A' in the Car Inventory)</option>
+                    {% else %}
+                        <option value="" disabled selected>-- Choose a Car --</option>
+                        {% for car in available_cars %}
+                            <option value="{{ car.id }}">{{ car.brand }} {{ car.model }} ({{ car.reg_number }}) - ${{ car.rate | round(2) }}/day</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                {% if not available_cars %}<p class="mt-1 text-xs text-red-500">All cars are currently rented or marked unavailable.</p>{% endif %}
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Rent Date -->
+                <div>
+                    <label for="rent_date" class="block text-sm font-medium text-gray-700 mb-1">Rent Start Date</label>
+                    <!-- 'today' variable is passed from app.py -->
+                    <input type="date" id="rent_date" name="rent_date" value="{{ today }}" required 
+                           class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+
+                <!-- Expected Return Date -->
+                <div>
+                    <label for="expected_return_date" class="block text-sm font-medium text-gray-700 mb-1">Expected Return Date</label>
+                    <!-- 'default_return' variable is passed from app.py (7 days later) -->
+                    <input type="date" id="expected_return_date" name="expected_return_date" value="{{ default_return }}" required 
+                           class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="pt-6 border-t mt-8 flex justify-end">
+            <button type="submit" 
+                {% if not customers or not available_cars %} disabled {% endif %}
+                class="inline-flex justify-center py-3 px-6 border border-transparent shadow-md text-base font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                <i data-lucide="check" class="h-5 w-5 mr-2"></i> Confirm Rental
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

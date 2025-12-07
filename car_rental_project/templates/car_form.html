@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+    <!-- Form action dynamically handles ADD or EDIT based on whether 'car.id' exists -->
+    <form method="POST" action="{% if car.id %}{{ url_for('edit_car', car_id=car.id) }}{% else %}{{ url_for('add_car') }}{% endif %}" class="space-y-6">
+        
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">
+            {% if car.id %}Edit Car Details{% else %}Register New Car{% endif %}
+        </h2>
+
+        <!-- Registration Number -->
+        <div>
+            <label for="reg_number" class="block text-sm font-medium text-gray-700">Registration Number</label>
+            <input type="text" name="reg_number" id="reg_number" required 
+                   value="{{ car.reg_number or '' }}"
+                   placeholder="e.g., ABC-123"
+                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+        </div>
+
+        <!-- Brand and Model (Side-by-side) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+                <label for="brand" class="block text-sm font-medium text-gray-700">Brand</label>
+                <input type="text" name="brand" id="brand" required
+                       value="{{ car.brand or '' }}"
+                       placeholder="e.g., Toyota"
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <div>
+                <label for="model" class="block text-sm font-medium text-gray-700">Model</label>
+                <input type="text" name="model" id="model" required
+                       value="{{ car.model or '' }}"
+                       placeholder="e.g., Camry"
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+        </div>
+
+        <!-- Year, Rate, and Status (Three-column layout) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <label for="year" class="block text-sm font-medium text-gray-700">Year</label>
+                <input type="number" name="year" id="year" required min="1900" max="{{ current_year }}"
+                       value="{{ car.year or '' }}"
+                       placeholder="{{ current_year }}"
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <div>
+                <label for="rate" class="block text-sm font-medium text-gray-700">Daily Rate ($)</label>
+                <input type="number" step="0.01" name="rate" id="rate" required min="0"
+                       value="{{ car.rate or '' }}"
+                       placeholder="e.g., 45.00"
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+            </div>
+            <div>
+                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                <select id="status" name="status" required
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <option value="A" {% if car.status == 'A' %}selected{% endif %}>A - Available</option>
+                    <option value="R" {% if car.status == 'R' %}selected{% endif %}>R - Rented</option>
+                    <option value="M" {% if car.status == 'M' %}selected{% endif %}>M - Maintenance</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-5">
+            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                {% if car.id %}
+                    <i data-lucide="save" class="h-6 w-6 mr-2"></i> Update Car Details
+                {% else %}
+                    <i data-lucide="car" class="h-6 w-6 mr-2"></i> Add Car to Inventory
+                {% endif %}
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

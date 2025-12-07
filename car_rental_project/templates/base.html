@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental Manager - {{ title }}</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom font and basic styling */
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
+        .sidebar { background-color: #1f2937; } /* Dark Gray */
+        .nav-link { transition: background-color 0.2s; }
+        .nav-link:hover { background-color: #374151; }
+        .active-link { background-color: #374151; border-left: 4px solid #3b82f6; color: #ffffff; }
+    </style>
+</head>
+<body class="flex min-h-screen">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar w-64 p-6 flex flex-col justify-between shadow-xl">
+        <div>
+            <div class="text-2xl font-bold text-blue-400 mb-10 border-b border-gray-700 pb-4">
+                <i data-lucide="car" class="inline-block h-6 w-6 mr-2"></i>
+                <span class="text-white">Rental System</span>
+            </div>
+            <nav class="space-y-2">
+                <a href="{{ url_for('index') }}" class="nav-link flex items-center p-3 text-lg font-medium rounded-lg text-gray-300 {% if title == 'Dashboard' %}active-link{% endif %}">
+                    <i data-lucide="layout-dashboard" class="h-5 w-5 mr-3"></i> Dashboard
+                </a>
+                <a href="{{ url_for('customer_list') }}" class="nav-link flex items-center p-3 text-lg font-medium rounded-lg text-gray-300 {% if 'Customer' in title and 'Management' in title %}active-link{% endif %}">
+                    <i data-lucide="users" class="h-5 w-5 mr-3"></i> Customers
+                </a>
+                <a href="{{ url_for('car_list') }}" class="nav-link flex items-center p-3 text-lg font-medium rounded-lg text-gray-300 {% if 'Car' in title or 'Inventory' in title %}active-link{% endif %}">
+                    <i data-lucide="key" class="h-5 w-5 mr-3"></i> Car Inventory
+                </a>
+                <a href="{{ url_for('rental_list') }}" class="nav-link flex items-center p-3 text-lg font-medium rounded-lg text-gray-300 {% if 'Rental' in title %}active-link{% endif %}">
+                    <i data-lucide="clipboard-list" class="h-5 w-5 mr-3"></i> Rentals
+                </a>
+                <a href="{{ url_for('payment_list') }}" class="nav-link flex items-center p-3 text-lg font-medium rounded-lg text-gray-300 {% if 'Payment' in title %}active-link{% endif %}">
+                    <i data-lucide="credit-card" class="h-5 w-5 mr-3"></i> Payments
+                </a>
+                <!-- NEW STAFF LINK -->
+                <a href="{{ url_for('staff_list') }}" class="nav-link flex items-center p-3 text-lg font-medium rounded-lg text-gray-300 {% if 'Staff' in title %}active-link{% endif %}">
+                    <i data-lucide="hard-hat" class="h-5 w-5 mr-3"></i> Staff
+                </a>
+            </nav>
+        </div>
+        <div class="text-sm text-gray-500 border-t border-gray-700 pt-4">
+            &copy; {{ current_year }} Car Rental App
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-8">
+        <h1 class="text-3xl font-extrabold text-gray-800 mb-8 border-b pb-4">{{ title }}</h1>
+
+        <!-- Flash Messages -->
+        <div class="mb-4">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="p-4 mb-4 rounded-lg text-white font-medium shadow-md 
+                            {% if category == 'success' %}bg-green-500
+                            {% elif category == 'danger' %}bg-red-500
+                            {% elif category == 'warning' %}bg-yellow-500
+                            {% else %}bg-blue-500{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Content Block -->
+        {% block content %}{% endblock %}
+
+    </main>
+    
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

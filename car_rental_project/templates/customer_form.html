@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-xl mx-auto bg-white p-8 rounded-xl shadow-2xl">
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">{{ title }}</h1>
+    
+    {% set is_edit = 'id' in customer %}
+    <form method="POST" action="{{ url_for('add_customer') if not is_edit else url_for('edit_customer', customer_id=customer.id) }}">
+        
+        <div class="mb-4">
+            <label for="first_name" class="block text-sm font-medium text-gray-700">First Name</label>
+            <input type="text" name="first_name" id="first_name" required 
+                   value="{{ customer.first_name | default('', true) }}"
+                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <div class="mb-4">
+            <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
+            <input type="text" name="last_name" id="last_name" required 
+                   value="{{ customer.last_name | default('', true) }}"
+                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+            <input type="email" name="email" id="email" required 
+                   value="{{ customer.email | default('', true) }}"
+                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <div class="mb-6">
+            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+            <input type="text" name="phone" id="phone" 
+                   value="{{ customer.phone | default('', true) }}"
+                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+        </div>
+
+        <div class="flex justify-end space-x-4">
+            <a href="{{ url_for('customer_list') }}" class="py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 transition duration-150">
+                Cancel
+            </a>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150">
+                {{ 'Save Changes' if is_edit else 'Add Customer' }}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
