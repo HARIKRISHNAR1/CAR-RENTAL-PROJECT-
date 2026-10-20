@@ -9,7 +9,7 @@ app = Flask(__name__)
 # IMPORTANT: Set a secret key for session management (required for flash messages)
 app.secret_key = 'super_secret_car_key_12345'
 
-# !!! MANDATORY: REPLACE THESE WITH YOUR ACTUAL MySQL CREDENTIALS !!!
+# !!! MANDATORY: REPLACE THESE WITH ACTUAL MySQL CREDENTIALS !!!
 MYSQL_HOST = 'localhost'
 MYSQL_USER = 'root' # e.g., 'root' <-- CHECK THIS!
 MYSQL_PASSWORD = 'Hari@996W1234' # e.g., 'mysecretpassword' <-- CHECK THIS!
